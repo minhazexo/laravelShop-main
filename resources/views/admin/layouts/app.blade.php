@@ -64,10 +64,7 @@
     <!-- Core JS -->
     <script src="{{ asset('admin/assets/vendors/core/core.js') }}"></script>
 
-    <!-- Flot Charts (core + plugins, only once) -->
-    <script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.js') }}"></script>
-    <script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.resize.js') }}"></script>
-
+   
     <!-- Other Plugin JS -->
     <script src="{{ asset('admin/assets/vendors/chartjs/Chart.min.js') }}"></script>
     <script src="{{ asset('admin/assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>

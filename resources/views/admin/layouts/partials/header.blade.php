@@ -1,29 +1,36 @@
 <!-- CSS -->
 <link rel="stylesheet" href="{{ asset('admin/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Flot Core -->
-<script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.js') }}"></script>
-
-<!-- Flot Plugins -->
-<script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.resize.js') }}"></script>
-
-
-<!-- Your chart init -->
+<!-- Chart Init -->
 <script>
-$(function () {
-    const data = [
-        { label: "Sales", data: [[1, 10], [2, 20], [3, 15], [4, 25]] }
-    ];
-    $.plot("#flotChart", data, {
-        series: { lines: { show: true }, points: { show: true } },
-        grid: { hoverable: true, clickable: true }
-    });
+$(document).ready(function () {
+    // Check if the chart container exists
+    if ($("#flotChart").length) {
+        const data = [
+            { label: "Sales", data: [[1, 10], [2, 20], [3, 15], [4, 25]] }
+        ];
+
+        const options = {
+            series: {
+                lines: { show: true },
+                points: { show: true }
+            },
+            grid: { hoverable: true, clickable: true },
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s: %y",
+                shifts: { x: 10, y: 20 },
+                defaultTheme: false
+            }
+        };
+
+        $.plot("#flotChart", data, options);
+    }
 });
 </script>
 
+<!-- Navbar HTML -->
 <nav class="navbar">
     <a href="#" class="sidebar-toggler">
         <i data-feather="menu"></i>
@@ -39,6 +46,7 @@ $(function () {
                 <input type="text" class="form-control" id="navbarForm" placeholder="Search here...">
             </div>
         </form>
+
         <ul class="navbar-nav">
             <!-- Language Dropdown -->
             <li class="nav-item dropdown">
@@ -117,7 +125,7 @@ $(function () {
                                 <p class="sub-text text-muted">Client meeting</p>
                             </div>
                         </a>
-                        <!-- Add more messages here with the same 30x30 placeholder -->
+                        <!-- Add more messages here -->
                     </div>
                     <div class="dropdown-footer d-flex align-items-center justify-content-center">
                         <a href="javascript:;">View all</a>
@@ -148,7 +156,6 @@ $(function () {
                             <div class="icon"><i data-feather="gift"></i></div>
                             <div class="content"><p>New Order Received</p><p class="sub-text text-muted">30 min ago</p></div>
                         </a>
-                        <!-- Add more notifications here -->
                     </div>
                     <div class="dropdown-footer d-flex align-items-center justify-content-center">
                         <a href="javascript:;">View all</a>
@@ -198,7 +205,6 @@ $(function () {
                     </div>
                 </div>
             </li>
-
         </ul>
     </div>
 </nav>
