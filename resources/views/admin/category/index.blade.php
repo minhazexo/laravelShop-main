@@ -29,7 +29,7 @@
                                 <img src="{{ $category?->thumbnail }}" alt="Category Image" width="60">
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('category.edit', $category?->id) }}" class="btn btn-danger btn-icon btn-md">
+                                <a href="{{ route('category.edit', $category?->id) }}" class="btn btn-danger btn-icon btn-md deleteConfirm">
                                     <i data-lucide="edit"></i>
                                 </a>
                             </td>
@@ -96,26 +96,51 @@
 
 @push('script')
 <script>
-function validateImage(input) {
-    const file = input.files[0];
-    const errorMessage = document.getElementById('imageError');
-    const imagePreview = document.getElementById('categoryImagePrv');
-    const submitBtn = document.getElementById('submit');
+$(function() {
+    // Delete confirmation using jQuery safely
+    $('.deleteConfirm').on('click', function(e) {
+        e.preventDefault();
+        const href = $(this).attr('href');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = href;
+            }
+        });
+    });
 
-    errorMessage.textContent = '';
-    submitBtn.disabled = false;
+    // Image validation function
+    function validateImage(input) {
+        const file = input.files[0];
+        const errorMessage = document.getElementById('imageError');
+        const imagePreview = document.getElementById('categoryImagePrv');
+        const submitBtn = document.getElementById('submit');
 
-    if (file) {
-        const fileSizeMB = file.size / (1024 * 1024);
-        imagePreview.src = URL.createObjectURL(file);
+        errorMessage.textContent = '';
+        submitBtn.disabled = false;
 
-        if (fileSizeMB > 2) {
-            errorMessage.textContent = 'Image size must be less than 2MB';
-            submitBtn.disabled = true;
+        if (file) {
+            const fileSizeMB = file.size / (1024 * 1024);
+            imagePreview.src = URL.createObjectURL(file);
+
+            if (fileSizeMB > 2) {
+                errorMessage.textContent = 'Image size must be less than 2MB';
+                submitBtn.disabled = true;
+            }
+        } else {
+            imagePreview.src = "{{ asset('default.webp') }}";
         }
-    } else {
-        imagePreview.src = "{{ asset('default.webp') }}";
     }
-}
+
+    // Expose globally for inline onchange
+    window.validateImage = validateImage;
+});
 </script>
 @endpush
