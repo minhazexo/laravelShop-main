@@ -4,16 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Media;
 use Arafat\LaravelRepository\Repository;
-use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 class MediaRepository extends Repository
 {
     /**
-     * base method
-     *
-     * @method model()
+     * Base model method
      */
     public static function model()
     {
@@ -21,60 +18,52 @@ class MediaRepository extends Repository
     }
 
     /**
-     * Store a media file in the database and file system.
-     *
-     * @param UploadedFile $file The file to store.
-     * @param string $path The path to store the file in.
-     * @param string|null $type The type of media to store. If null, the type will be automatically determined.
-     * @return Media The stored media.
+     * Store media file in database and public storage
      */
-    public static function storeByRequest(UploadedFile $file, string $path, ?string $type = null): Media
+    public static function storeByRequest(UploadedFile $file, string $folder, ?string $type = null): Media
     {
-        $path = Storage::disk('public')->put('/' . trim($path, '/'), $file);
-        $extension = $file->extension();
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs($folder, $fileName, 'public');
+
         if (!$type) {
-            $type = in_array($extension, ['jpeg', 'jpg', 'png', 'gif','svg', 'webp']) ? 'image' : $extension;
+            $extension = strtolower($file->getClientOriginalExtension());
+            $type = in_array($extension, ['jpeg','jpg','png','gif','svg','webp']) ? 'image' : $extension;
         }
 
-       $media = self::create([
+        return self::create([
             'type' => $type,
             'src' => $path,
             'name' => $file->getClientOriginalName(),
-            'extension' => $extension
-       ]);
-
-       return $media;
+            'extension' => $file->getClientOriginalExtension(),
+        ]);
     }
 
     /**
-     * Update a media file in the database and file system.
-     *
-     * @param UploadedFile $file The file to update.
-     * @param string $path The path to update the file in.
-     * @param string|null $type The type of media to update. If null, the type will be automatically determined.
-     * @param Media $media The media to update.
-     * @return Media The updated media.
+     * Update media file in database and public storage
      */
-    public static function updateByRequest(UploadedFile $file, string $path, ?string $type = null, Media $media): Media
+    public static function updateByRequest(UploadedFile $file, string $folder, ?string $type = null, Media $media): Media
     {
-        $path = Storage::disk('public')->put('/' . trim($path, '/'), $file);
-        $extension = $file->extension();
-        if (!$type) {
-            $type = in_array($extension, ['jpeg', 'jpg', 'png', 'gif','svg', 'webp']) ? 'image' : $extension;
+        // Delete old file
+        if (Storage::disk('public')->exists($media->src)) {
+            Storage::disk('public')->delete($media->src);
         }
 
-        if(Storage::exists($media->src)){
-            Storage::delete($media->src);
+        // Store new file
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs($folder, $fileName, 'public');
+
+        if (!$type) {
+            $extension = strtolower($file->getClientOriginalExtension());
+            $type = in_array($extension, ['jpeg','jpg','png','gif','svg','webp']) ? 'image' : $extension;
         }
 
         $media->update([
             'type' => $type,
             'src' => $path,
             'name' => $file->getClientOriginalName(),
-            'extension' => $extension
+            'extension' => $file->getClientOriginalExtension(),
         ]);
 
         return $media;
-
     }
 }

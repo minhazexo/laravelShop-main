@@ -1,11 +1,20 @@
 <!-- CSS -->
 <link rel="stylesheet" href="{{ asset('admin/assets/vendors/flag-icon-css/css/flag-icon.min.css') }}">
 
+<!-- jQuery (must come first) -->
+<script src="{{ asset('admin/assets/vendors/jquery/jquery.min.js') }}"></script>
 
-<!-- Chart Init -->
+<!-- Flot Core & Plugins -->
+<script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.js') }}"></script>
+<script src="{{ asset('admin/assets/vendors/jquery.flot/jquery.flot.resize.js') }}"></script>
+<script src="{{ asset('admin/assets/vendors/jquery.flot.tooltip/jquery.flot.tooltip.min.js') }}"></script>
+
+<!-- Feather Icons -->
+<script src="{{ asset('admin/assets/vendors/feather-icons/feather.min.js') }}"></script>
+
+<!-- Your Flot Chart Init -->
 <script>
 $(document).ready(function () {
-    // Check if the chart container exists
     if ($("#flotChart").length) {
         const data = [
             { label: "Sales", data: [[1, 10], [2, 20], [3, 15], [4, 25]] }
@@ -27,8 +36,11 @@ $(document).ready(function () {
 
         $.plot("#flotChart", data, options);
     }
+
+    feather.replace();
 });
 </script>
+
 
 <!-- Navbar HTML -->
 <nav class="navbar">
@@ -103,7 +115,7 @@ $(document).ready(function () {
                     <div class="dropdown-body">
                         <a href="javascript:;" class="dropdown-item">
                             <div class="figure">
-                                <img src="{{ asset('assets/images/screenshots/30x30.jpg') }}" alt="userr">
+                                <img src="{{ asset('assets/images/screenshots/30x30.jpg') }}" alt="user">
                             </div>
                             <div class="content">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -115,7 +127,7 @@ $(document).ready(function () {
                         </a>
                         <a href="javascript:;" class="dropdown-item">
                             <div class="figure">
-                                <img src="{{ asset('assets/images/screenshots/30x30.jpg') }}" alt="userr">
+                                <img src="{{ asset('assets/images/screenshots/30x30.jpg') }}" alt="user">
                             </div>
                             <div class="content">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -125,7 +137,6 @@ $(document).ready(function () {
                                 <p class="sub-text text-muted">Client meeting</p>
                             </div>
                         </a>
-                        <!-- Add more messages here -->
                     </div>
                     <div class="dropdown-footer d-flex align-items-center justify-content-center">
                         <a href="javascript:;">View all</a>
@@ -172,7 +183,7 @@ $(document).ready(function () {
                 <div class="dropdown-menu" aria-labelledby="profileDropdown">
                     <div class="dropdown-header d-flex flex-column align-items-center">
                         <div class="mb-3 figure">
-                            <img src="{{ asset('assets/images/screenshots/80x80.jpg') }}" alt="">
+                            <img src="{{ asset('assets/images/screenshots/80x80.jpg') }}" alt="profile">
                         </div>
                         <div class="text-center info">
                             <p class="mb-0 name font-weight-bold">Amiah Burton</p>
@@ -205,6 +216,7 @@ $(document).ready(function () {
                     </div>
                 </div>
             </li>
+
         </ul>
     </div>
 </nav>

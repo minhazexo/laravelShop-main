@@ -11,27 +11,31 @@ class SubCategory extends Model
 {
     protected $guarded = ['id'];
 
-    public function media(){
-        return $this->belongsTo(Media::class);
+    // Relation to Media
+    public function media()
+    {
+        return $this->belongsTo(\App\Models\Media::class, 'media_id');
     }
 
+    // Easy accessor for thumbnail
     public function thumbnail(): Attribute
     {
-        $src = asset('default.webp');
-        if ($this->media && Storage::exists($this->media->src)) {
-            $src = Storage::url($this->media->src);
-        }
         return Attribute::make(
-            get: fn () => $src,
+            get: fn () => $this->media && Storage::disk('public')->exists($this->media->src)
+                ? asset('storage/'.$this->media->src)
+                : asset('default.webp')
         );
     }
 
+    // Relation to Category
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    protected static function boot(){
+    // Auto-generate slug if empty
+    protected static function boot()
+    {
         parent::boot();
 
         static::creating(function($subCategory){
@@ -44,9 +48,8 @@ class SubCategory extends Model
                 }
                 $subCategory->slug = $slug;
             } else {
-                $subCategory->slug = Str::slug($subCategory->name);
+                $subCategory->slug = Str::slug($subCategory->slug);
             }
-
         });
     }
 }

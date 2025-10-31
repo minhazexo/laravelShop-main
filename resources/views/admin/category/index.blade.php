@@ -26,7 +26,8 @@
                             <td>{{ $category?->name }}</td>
                             <td>{{ $category?->slug }}</td>
                             <td class="text-center">
-                                <img src="{{ $category?->thumbnail }}" alt="Category Image" width="60">
+                                <img src="{{ $category->media ? asset('storage/'.$category->media->src) : asset('default.webp') }}" alt="Category Image" width="60">
+
                             </td>
                             <td class="text-center">
                                 <a href="{{ route('category.edit', $category?->id) }}" class="btn btn-danger btn-icon btn-md deleteConfirm">
